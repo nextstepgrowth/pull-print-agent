@@ -3,8 +3,15 @@ import react from '@vitejs/plugin-react';
 import electron from 'vite-plugin-electron';
 
 // Vite config for both renderer and Electron main process.
+import { resolve } from 'path';
+
 export default defineConfig({
   root: 'src/renderer',
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src'),
+    },
+  },
   plugins: [
     react(),
     electron({
