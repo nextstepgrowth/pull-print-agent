@@ -22,23 +22,32 @@ export class PrintJobProxyService {
       });
       return response.data;
     } catch (err: any) {
-      throw new CustomError("원격 서버 업로드 실패: " + (err.response?.data?.error || err.message), 502);
+      throw new CustomError(
+        "원격 서버 업로드 실패: " + (err.response?.data?.error || err.message),
+        502,
+      );
     } finally {
       if (file && file.path && fs.existsSync(file.path)) {
-        try { fs.unlinkSync(file.path); } catch {}
+        try {
+          fs.unlinkSync(file.path);
+        } catch {}
       }
     }
   }
 
   static async download(req: Request, res: Response) {
     const code = req.params.code;
-    const response = await axios.get(`${REMOTE_URL}/${code}`, { responseType: 'stream' });
+    const response = await axios.get(`${REMOTE_URL}/${code}`, {
+      responseType: "stream",
+    });
     res.set(response.headers);
     response.data.pipe(res);
-    response.data.on('end', () => res.end());
-    response.data.on('error', (err: any) => {
+    response.data.on("end", () => res.end());
+    response.data.on("error", (err: any) => {
       if (!res.headersSent) {
-        res.status(502).json({ error: "원격 서버 다운로드 실패: " + err.message });
+        res
+          .status(502)
+          .json({ error: "원격 서버 다운로드 실패: " + err.message });
       }
     });
   }

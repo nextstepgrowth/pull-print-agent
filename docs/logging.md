@@ -68,9 +68,9 @@
 ## 8. 참고 예시
 
 ```typescript
-logInfo('[UPLOAD] code=abcd, file=test.pdf', { ip: req.ip });
-logWarn('[LOCAL_DOWNLOAD_FAIL] PDF 없음 code=abcd');
-logError('[UPLOAD_FATAL] code=abcd, err=' + err.message);
+logInfo("[UPLOAD] code=abcd, file=test.pdf", { ip: req.ip });
+logWarn("[LOCAL_DOWNLOAD_FAIL] PDF 없음 code=abcd");
+logError("[UPLOAD_FATAL] code=abcd, err=" + err.message);
 ```
 
 ---

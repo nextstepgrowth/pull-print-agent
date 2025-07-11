@@ -1,9 +1,9 @@
 import fs from "fs";
 import axios from "axios";
 import FormData from "form-data";
-import { PrintJobProxyService } from '../src/services/print-job-proxy-service';
-import { CustomError } from '../src/utils/custom-error';
-import { REMOTE_URL } from '../src/config/const';
+import { PrintJobProxyService } from "../src/services/print-job-proxy-service";
+import { CustomError } from "../src/utils/custom-error";
+import { REMOTE_URL } from "../src/config/const";
 
 jest.mock("axios");
 
@@ -24,9 +24,9 @@ describe("PrintJobProxyService", () => {
     const req: any = {
       file: {
         originalname: "file.pdf",
-        path: testFilePath
+        path: testFilePath,
       },
-      params: { code: "proxytest" }
+      params: { code: "proxytest" },
     };
     const result = await PrintJobProxyService.upload(req);
     expect(result.ok).toBe(true);
@@ -36,7 +36,9 @@ describe("PrintJobProxyService", () => {
 
   it("파일 미첨부시 예외", async () => {
     const req: any = { file: undefined, params: { code: "proxytest" } };
-    await expect(PrintJobProxyService.upload(req)).rejects.toThrow(/업로드되지/);
+    await expect(PrintJobProxyService.upload(req)).rejects.toThrow(
+      /업로드되지/,
+    );
   });
 
   it("원격 업로드 실패시 파일 삭제 및 예외", async () => {
@@ -44,9 +46,9 @@ describe("PrintJobProxyService", () => {
     const req: any = {
       file: {
         originalname: "file.pdf",
-        path: testFilePath
+        path: testFilePath,
       },
-      params: { code: "proxytest" }
+      params: { code: "proxytest" },
     };
     await expect(PrintJobProxyService.upload(req)).rejects.toThrow(/실패/);
     expect(fs.existsSync(testFilePath)).toBe(false); // 파일 삭제됨
@@ -55,16 +57,21 @@ describe("PrintJobProxyService", () => {
   it("원격 다운로드 성공 (스트림) - 헤더/pipe 호출", async () => {
     const mockStream: any = {
       pipe: jest.fn(),
-      on: jest.fn((event, cb) => { if (event === "end") cb(); })
+      on: jest.fn((event, cb) => {
+        if (event === "end") cb();
+      }),
     };
-    mockAxios.get.mockResolvedValue({ headers: { foo: "bar" }, data: mockStream });
+    mockAxios.get.mockResolvedValue({
+      headers: { foo: "bar" },
+      data: mockStream,
+    });
     const req: any = { params: { code: "proxytest" } };
     const res: any = {
       set: jest.fn(),
       end: jest.fn(),
       headersSent: false,
       status: jest.fn().mockReturnThis(),
-      json: jest.fn()
+      json: jest.fn(),
     };
     await PrintJobProxyService.download(req, res);
     expect(res.set).toHaveBeenCalledWith({ foo: "bar" });
@@ -75,7 +82,7 @@ describe("PrintJobProxyService", () => {
   it("다운로드 스트림 에러시 502 응답", async () => {
     const mockStream: any = {
       pipe: jest.fn(),
-      on: jest.fn()
+      on: jest.fn(),
     };
     mockAxios.get.mockResolvedValue({ headers: {}, data: mockStream });
     const req: any = { params: { code: "proxytest" } };
@@ -84,13 +91,17 @@ describe("PrintJobProxyService", () => {
       end: jest.fn(),
       headersSent: false,
       status: jest.fn().mockReturnThis(),
-      json: jest.fn()
+      json: jest.fn(),
     };
     // 에러 핸들러 직접 호출
     await PrintJobProxyService.download(req, res);
-    const errorHandler = mockStream.on.mock.calls.find((call: [string, any]) => call[0] === "error")[1];
+    const errorHandler = mockStream.on.mock.calls.find(
+      (call: [string, any]) => call[0] === "error",
+    )[1];
     errorHandler(new Error("streamfail"));
     expect(res.status).toHaveBeenCalledWith(502);
-    expect(res.json).toHaveBeenCalledWith({ error: expect.stringMatching(/streamfail/) });
+    expect(res.json).toHaveBeenCalledWith({
+      error: expect.stringMatching(/streamfail/),
+    });
   });
 });

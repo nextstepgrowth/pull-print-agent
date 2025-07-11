@@ -36,20 +36,28 @@ app.use((req, res, next) => {
 });
 
 // PDF 업로드
-app.post("/print-jobs/:code", upload.single("file"), async (req: Request, res: Response) => {
-  try {
-    const result = await PrintJobController.handlePost(req);
-    logInfo(`[UPLOAD] code=${req.params.code}, file=${req.file?.originalname}, ip=${req.ip}`);
-    res.json(result);
-  } catch (err: any) {
-    if (err instanceof CustomError) {
-      logWarn(`[UPLOAD_FAIL] code=${req.params.code}, file=${req.file?.originalname}, status=${err.status}, msg=${err.message}`);
-      res.status(err.status).json({ error: err.message });
-    } else {
-      throw err;
+app.post(
+  "/print-jobs/:code",
+  upload.single("file"),
+  async (req: Request, res: Response) => {
+    try {
+      const result = await PrintJobController.handlePost(req);
+      logInfo(
+        `[UPLOAD] code=${req.params.code}, file=${req.file?.originalname}, ip=${req.ip}`,
+      );
+      res.json(result);
+    } catch (err: any) {
+      if (err instanceof CustomError) {
+        logWarn(
+          `[UPLOAD_FAIL] code=${req.params.code}, file=${req.file?.originalname}, status=${err.status}, msg=${err.message}`,
+        );
+        res.status(err.status).json({ error: err.message });
+      } else {
+        throw err;
+      }
     }
-  }
-});
+  },
+);
 
 // 다운로드 & Electron 자동 프린트
 app.get("/print-jobs/:code", async (req: Request, res: Response) => {
@@ -57,7 +65,9 @@ app.get("/print-jobs/:code", async (req: Request, res: Response) => {
     await PrintJobController.handleGet(req, res);
   } catch (err: any) {
     if (err instanceof CustomError) {
-      logWarn(`[DOWNLOAD_FAIL] code=${req.params.code}, status=${err.status}, msg=${err.message}`);
+      logWarn(
+        `[DOWNLOAD_FAIL] code=${req.params.code}, status=${err.status}, msg=${err.message}`,
+      );
       res.status(err.status).json({ error: err.message });
     } else {
       throw err;
