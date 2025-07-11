@@ -37,6 +37,7 @@ export class PrintJobLocalService {
     );
     return { code, expiresIn: "24h" };
   }
+
   static load(req: Request, res: Response) {
     const code = req.params.code;
     const codeDir = path.join(this.TEMP_DIR, code);
@@ -77,6 +78,7 @@ export class PrintJobLocalService {
       throw new CustomError("압축 파일 생성 실패: " + err.message, 500);
     });
   }
+
   static deleteTimeoutFile() {
     const now = Date.now();
     if (!fs.existsSync(this.TEMP_DIR)) return;
