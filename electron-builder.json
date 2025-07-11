@@ -1,0 +1,13 @@
+{
+  "files": [
+    "dist/electron/**",
+    "dist/renderer/**",
+    "dist/src/**",
+    "node_modules/**",
+    "package.json"
+  ],
+  "directories": {
+    "buildResources": "build"
+  },
+  "main": "dist/electron/main.js"
+}

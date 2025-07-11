@@ -1,19 +1,27 @@
 {
   "name": "pull-print-agent",
   "version": "1.0.0",
-  "description": "",
-  "main": "dist/index.js",
+  "description": "Pull print agent Electron + React + Vite app",
+  "main": "dist/electron/main.js",
+  "build": {
+    "files": [
+      "dist/electron/**",
+      "dist/renderer/**",
+      "dist/src/**",
+      "node_modules/**",
+      "package.json"
+    ]
+  },
   "scripts": {
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "dev": "nodemon --watch src --ext ts --exec ts-node src/server.ts",
     "build": "tsc && vite build",
-    "start": "node dist/server.js",
+    "start": "node dist/src/server.js",
     "typecheck": "tsc --noEmit",
-    "electron": "electron dist/electron.js",
-    "electron:dev": "nodemon --watch src --ext ts --exec ts-node src/electron.ts",
+    "electron": "electron dist/electron/main.js",
     "vite": "vite",
-    "dev:electron": "concurrently -k \"npm:dev\" \"vite\"", 
+    "dev:electron": "concurrently -k \"npm:dev\" \"vite\" \"electron dist/electron/main.js\"", 
     "dist": "npm run build && electron-builder",
     "test": "jest"
   },
@@ -22,7 +30,7 @@
   "dependencies": {
     "archiver": "^7.0.1",
     "axios": "^1.10.0",
-    "electron": "^37.2.1",
+    
     "express": "^5.1.0",
     "form-data": "^4.0.3",
     "node-fetch": "^3.3.2",
@@ -30,6 +38,7 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "electron": "^37.2.1",
     "@types/archiver": "^6.0.3",
     "@types/express": "^5.0.3",
     "@types/jest": "^30.0.0",

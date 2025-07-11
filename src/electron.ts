@@ -9,7 +9,11 @@ export function printElectron(filePath: string): Promise<void> {
         { silent: true, printBackground: true },
         (status, reason) => {
           win.close();
-          status ? resolve() : reject(new Error(reason));
+          if (status) {
+            resolve();
+          } else {
+            reject(new Error(reason));
+          }
         },
       );
     });
