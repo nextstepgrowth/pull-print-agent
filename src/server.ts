@@ -2,7 +2,9 @@
 import express, { Request, Response } from "express";
 import multer from "multer";
 import path from "path";
-import { PrintJobService } from "./http-service";
+import { PrintJobController } from "./http-service";
+import { PrintJobLocalService } from "./print-job-local-service";
+import { logInfo, logWarn, logError } from "./log";
 import { CustomError } from "./custom-error";
 
 // Electron 타입 임포트 (런타임에만 존재)
@@ -28,18 +30,20 @@ const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
 // deleteTimeoutFile을 미들웨어로 등록
 app.use((req, res, next) => {
-  PrintJobService.deleteTimeoutFile();
+  PrintJobLocalService.deleteTimeoutFile();
+  logInfo(`[REQ] ${req.method} ${req.originalUrl}`);
   next();
 });
 
-
 // PDF 업로드
-app.post("/:code", upload.single("file"), (req: Request, res: Response) => {
+app.post("/print-jobs/:code", upload.single("file"), async (req: Request, res: Response) => {
   try {
-    const result = PrintJobService.handleSave(req);
+    const result = await PrintJobController.handlePost(req);
+    logInfo(`[UPLOAD] code=${req.params.code}, file=${req.file?.originalname}, ip=${req.ip}`);
     res.json(result);
   } catch (err: any) {
     if (err instanceof CustomError) {
+      logWarn(`[UPLOAD_FAIL] code=${req.params.code}, file=${req.file?.originalname}, status=${err.status}, msg=${err.message}`);
       res.status(err.status).json({ error: err.message });
     } else {
       throw err;
@@ -48,11 +52,12 @@ app.post("/:code", upload.single("file"), (req: Request, res: Response) => {
 });
 
 // 다운로드 & Electron 자동 프린트
-app.get("/:code", (req: Request, res: Response) => {
+app.get("/print-jobs/:code", async (req: Request, res: Response) => {
   try {
-    PrintJobService.handleDownload(req, res);
+    await PrintJobController.handleGet(req, res);
   } catch (err: any) {
     if (err instanceof CustomError) {
+      logWarn(`[DOWNLOAD_FAIL] code=${req.params.code}, status=${err.status}, msg=${err.message}`);
       res.status(err.status).json({ error: err.message });
     } else {
       throw err;
@@ -61,5 +66,5 @@ app.get("/:code", (req: Request, res: Response) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Print Queue Server listening on http://localhost:${PORT}`);
+  logInfo(`Print Queue Server listening on http://localhost:${PORT}`);
 });

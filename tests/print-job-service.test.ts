@@ -1,14 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
-import { PrintJobService } from '../src/http-service';
+import { PrintJobLocalService } from '../src/print-job-local-service';
 
-describe('PrintJobService 유닛 테스트', () => {
+describe('PrintJobLocalService 유닛 테스트', () => {
   const testTempDir = path.join(os.tmpdir(), 'pull-print-agent-test-unit');
 
   beforeAll(() => {
-    (PrintJobService as any).TEMP_DIR = testTempDir;
-    PrintJobService.ensureTempDir();
+    (PrintJobLocalService as any).TEMP_DIR = testTempDir;
+    PrintJobLocalService.ensureTempDir();
   });
 
   afterEach(() => {
@@ -33,7 +33,7 @@ describe('PrintJobService 유닛 테스트', () => {
       params: { code: 'unitcode' }
     };
     fs.writeFileSync(req.file.path, '%PDF-1.4\n%...');
-    const result = PrintJobService.handleSave(req);
+    const result = PrintJobLocalService.save(req);
     expect(result.code).toBe('unitcode');
     expect(fs.existsSync(path.join(testTempDir, 'unitcode', 'test.pdf'))).toBe(true);
   });
@@ -47,7 +47,7 @@ describe('PrintJobService 유닛 테스트', () => {
       params: { code: 'unitcode' }
     };
     fs.writeFileSync(req.file.path, 'not a pdf');
-    expect(() => PrintJobService.handleSave(req)).toThrow(/PDF 파일만 허용/);
+    expect(() => PrintJobLocalService.save(req)).toThrow(/PDF 파일만 허용/);
     // 파일이 삭제되었는지 확인
     expect(fs.existsSync(req.file.path)).toBe(false);
   });
@@ -62,7 +62,7 @@ describe('PrintJobService 유닛 테스트', () => {
       params: { code: 'unitcode' }
     };
     fs.writeFileSync(uploadReq.file.path, '%PDF-1.4\n%...');
-    PrintJobService.handleSave(uploadReq);
+    PrintJobLocalService.save(uploadReq);
 
     // 다운로드
     const downloadReq: any = { params: { code: 'unitcode' } };
@@ -74,12 +74,12 @@ describe('PrintJobService 유닛 테스트', () => {
         done();
       }
     };
-    PrintJobService.handleDownload(downloadReq, res);
+    PrintJobLocalService.load(downloadReq, res);
   });
 
   it('없는 코드로 다운로드 시 에러', () => {
     const downloadReq: any = { params: { code: 'invalidcode' } };
     const res: any = {};
-    expect(() => PrintJobService.handleDownload(downloadReq, res)).toThrow(/유효하지 않은 인증번호/);
+    expect(() => PrintJobLocalService.load(downloadReq, res)).toThrow(/유효하지 않은 인증번호/);
   });
 }); 
