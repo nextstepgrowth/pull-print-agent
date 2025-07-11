@@ -1,0 +1,35 @@
+{
+  "name": "pull-print-agent",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "nodemon --watch src --ext ts --exec ts-node src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "npx eslint ./src --ext .ts",
+    "electron": "electron dist/electron.js",
+    "electron:dev": "nodemon --watch src --ext ts --exec ts-node src/electron.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "archiver": "^7.0.1",
+    "electron": "^37.2.1",
+    "express": "^5.1.0",
+    "multer": "^2.0.1",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/archiver": "^6.0.3",
+    "@types/express": "^5.0.3",
+    "@types/multer": "^2.0.0",
+    "@types/node": "^24.0.13",
+    "@types/node-fetch": "^2.6.12",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
