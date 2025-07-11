@@ -1,8 +1,9 @@
 import fs from "fs";
 import axios from "axios";
 import FormData from "form-data";
-import { PrintJobProxyService } from "../src/print-job-proxy-service";
-import { CustomError } from "../src/custom-error";
+import { PrintJobProxyService } from '../src/services/print-job-proxy-service';
+import { CustomError } from '../src/utils/custom-error';
+import { REMOTE_URL } from '../src/config/const';
 
 jest.mock("axios");
 

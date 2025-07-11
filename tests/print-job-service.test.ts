@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
-import { PrintJobLocalService } from '../src/print-job-local-service';
+import { PrintJobLocalService } from '../src/services/print-job-local-service';
 
 describe('PrintJobLocalService 유닛 테스트', () => {
   const testTempDir = path.join(os.tmpdir(), 'pull-print-agent-test-unit');

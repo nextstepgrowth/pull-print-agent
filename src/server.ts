@@ -2,10 +2,10 @@
 import express, { Request, Response } from "express";
 import multer from "multer";
 import path from "path";
-import { PrintJobController } from "./http-service";
-import { PrintJobLocalService } from "./print-job-local-service";
-import { logInfo, logWarn, logError } from "./log";
-import { CustomError } from "./custom-error";
+import { PrintJobController } from "./controllers/print-job-controller";
+import { PrintJobLocalService } from "./services/print-job-local-service";
+import { logInfo, logWarn, logError } from "./utils/log";
+import { CustomError } from "./utils/custom-error";
 
 // Electron 타입 임포트 (런타임에만 존재)
 declare global {

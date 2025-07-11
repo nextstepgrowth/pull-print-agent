@@ -1,4 +1,4 @@
-import { logInfo, logWarn, logError } from '../src/log';
+import { logInfo, logWarn, logError } from '../src/utils/log';
 
 describe('log util', () => {
   let infoSpy: jest.SpyInstance, warnSpy: jest.SpyInstance, errorSpy: jest.SpyInstance;
