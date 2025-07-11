@@ -2,8 +2,7 @@
 import express, { Request, Response } from "express";
 import multer from "multer";
 import path from "path";
-import fs from "fs";
-import { PrintJobService } from "./print-job-service";
+import { PrintJobService } from "./http-service";
 import { CustomError } from "./custom-error";
 
 // Electron 타입 임포트 (런타임에만 존재)
