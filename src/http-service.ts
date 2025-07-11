@@ -12,9 +12,11 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 import archiver from "archiver";
+import axios from "axios";
+import FormData from "form-data";
 import { Request, Response } from "express";
 import { CustomError } from "./custom-error";
-import { EXPIRY_MS, TEMP_DIR_NAME } from "./const";
+import { EXPIRY_MS, TEMP_DIR_NAME, REMOTE_URL } from "./const";
 
 export class PrintJobService {
   static readonly TEMP_DIR = path.join(os.tmpdir(), TEMP_DIR_NAME);
