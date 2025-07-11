@@ -14,11 +14,10 @@ import path from "path";
 import archiver from "archiver";
 import { Request, Response } from "express";
 import { CustomError } from "./custom-error";
-
-const EXPIRY_MS = 24 * 60 * 60 * 1000; // 24시간
+import { EXPIRY_MS, TEMP_DIR_NAME } from "./const";
 
 export class PrintJobService {
-  static readonly TEMP_DIR = path.join(os.tmpdir(), "pull-print-agent-temp");
+  static readonly TEMP_DIR = path.join(os.tmpdir(), TEMP_DIR_NAME);
 
   /**
    * 프로그램 시작 시 1회만 호출하여 임시 폴더를 생성한다.
