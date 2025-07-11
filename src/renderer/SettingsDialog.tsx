@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export function SettingsDialog({
   open,
@@ -56,7 +57,7 @@ export function SettingsDialog({
         </DialogHeader>
         <div className="space-y-4">
           <div>
-            <label className="block mb-1">인증번호</label>
+            <Label htmlFor="authCode" className="mb-1">인증번호</Label>
             <Input
               value={localAuthCode}
               onChange={handleAuthCodeChange}
@@ -67,7 +68,7 @@ export function SettingsDialog({
           </div>
           <div className="flex items-center gap-2">
             <div className="flex-1">
-              <label className="block mb-1">원격서버URL</label>
+              <Label htmlFor="remoteUrl" className="mb-1">원격서버URL</Label>
               <Input
                 value={localRemoteUrl}
                 onChange={handleRemoteUrlChange}

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { DocumentList, Document } from "./DocumentList";
+import { DocumentTable, Document } from "./DocumentTable";
 import { SettingsDialog } from "./SettingsDialog";
-import { DeleteConfirmDialog } from "./DeleteConfirmDialog";
+
 import { GearIcon } from "@radix-ui/react-icons";
 
 const MOCK_DOCS: Document[] = [
@@ -16,17 +16,11 @@ function App() {
   const [remoteUrl, setRemoteUrl] = useState("");
   const [docs, setDocs] = useState<Document[]>(MOCK_DOCS);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; id?: string }>({ open: false });
+  
 
-  // 문서 삭제
+  // 문서 삭제 (Table 내부 AlertDialog에서 호출)
   const handleDelete = (id: string) => {
-    setDeleteDialog({ open: true, id });
-  };
-  const confirmDelete = () => {
-    if (deleteDialog.id) {
-      setDocs((prev) => prev.filter((d) => d.id !== deleteDialog.id));
-    }
-    setDeleteDialog({ open: false });
+    setDocs((prev) => prev.filter((d) => d.id !== id));
   };
 
   // 설정 다이얼로그에서 URL 삭제
@@ -47,21 +41,13 @@ function App() {
 
       {/* 문서 리스트 */}
       <main className="max-w-2xl mx-auto mt-8 px-2">
-        <DocumentList
+        <DocumentTable
           documents={docs}
           onPrint={() => {}}
           onDownload={() => {}}
           onDelete={handleDelete}
         />
       </main>
-
-      {/* 삭제 확인 모달 */}
-      <DeleteConfirmDialog
-        open={deleteDialog.open}
-        onOpenChange={(open) => setDeleteDialog((prev) => ({ ...prev, open }))}
-        onConfirm={confirmDelete}
-        fileName={docs.find((d) => d.id === deleteDialog.id)?.fileName || ""}
-      />
 
       {/* 설정 다이얼로그 */}
       <SettingsDialog
