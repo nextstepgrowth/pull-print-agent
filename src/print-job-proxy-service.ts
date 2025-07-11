@@ -24,6 +24,8 @@ export class PrintJobProxyService {
         headers: form.getHeaders(),
       });
       return response.data;
+    } catch (err: any) {
+      throw new CustomError("원격 서버 업로드 실패: " + (err.response?.data?.error || err.message), 502);
     } finally {
       // 업로드 성공/실패와 관계없이 임시 파일 정리
       if (file && file.path && fs.existsSync(file.path)) {
