@@ -4,11 +4,12 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
     "dev": "nodemon --watch src --ext ts --exec ts-node src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
     "typecheck": "tsc --noEmit",
-    "lint": "npx eslint ./src --ext .ts",
     "electron": "electron dist/electron.js",
     "electron:dev": "nodemon --watch src --ext ts --exec ts-node src/electron.ts",
     "test": "jest"
