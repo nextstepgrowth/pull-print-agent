@@ -36,7 +36,7 @@ app.use((req, res, next) => {
 // PDF 업로드
 app.post("/:code", upload.single("file"), (req: Request, res: Response) => {
   try {
-    const result = PrintJobService.handleUpload(req);
+    const result = PrintJobService.handleSave(req);
     res.json(result);
   } catch (err: any) {
     if (err instanceof CustomError) {

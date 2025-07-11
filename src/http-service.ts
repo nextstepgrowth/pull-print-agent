@@ -40,7 +40,7 @@ export class PrintJobService {
    * TEMP_DIR/code/ 폴더를 만들고, originalName으로 저장.
    * @throws CustomError 파일 미업로드, PDF 아님 등
    */
-  static handleUpload(req: Request) {
+  static handleSave(req: Request) {
     const file = req.file;
     const code = req.params.code;
     if (!file) {
