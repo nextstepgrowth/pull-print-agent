@@ -7,7 +7,6 @@ import { CustomError } from "../utils/custom-error";
 import { TEMP_DIR_NAME } from "../config/const";
 import os from "os";
 import { logInfo, logWarn, logError } from "../utils/log";
-
 export class PrintJobLocalService {
   static readonly TEMP_DIR = path.join(os.tmpdir(), TEMP_DIR_NAME);
   static ensureTempDir() {
