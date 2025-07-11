@@ -11,10 +11,11 @@
     "resolveJsonModule": true,
     "sourceMap": true,
     "baseUrl": ".",
+    "jsx": "react-jsx",
     "paths": {
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/server.ts", "src/print-service.ts"],
+  "include": ["src"],
   "exclude": ["node_modules", "dist"]
 }
