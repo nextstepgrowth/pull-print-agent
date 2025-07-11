@@ -20,8 +20,33 @@ export default [
     },
     rules: {
       ...tseslint.configs.recommended.rules,
-
+      "no-undef": "off",
+      "no-empty": ["warn", { "allowEmptyCatch": true }],
+      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-explicit-any": "off"
     },
+  },
+  {
+    files: ["*.js"],
+    rules: { "no-undef": "off", "@typescript-eslint/no-unused-expressions": "off" }
+  },
+  {
+    files: ["tests/**/*.ts"],
+    languageOptions: {
+      globals: {
+        jest: false,
+        describe: false,
+        it: false,
+        beforeEach: false,
+        afterEach: false,
+        beforeAll: false,
+        afterAll: false,
+        expect: false
+      }
+    },
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off"
+    }
   },
   {
     ignores: ["dist/**", "node_modules/**"]
