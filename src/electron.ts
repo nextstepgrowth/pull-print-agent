@@ -1,5 +1,4 @@
 import { BrowserWindow } from "electron";
-import path from "path";
 
 export function printElectron(filePath: string): Promise<void> {
   return new Promise((resolve, reject) => {
