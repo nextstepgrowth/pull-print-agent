@@ -1,11 +1,11 @@
 // 로컬 파일 저장/다운로드/만료 삭제 서비스
-import fs from "fs";
-import path from "path";
-import archiver from "archiver";
+const fs = require("fs");
+const path = require("path");
+const archiver = require("archiver");
+const os = require("os");
 import { Request, Response } from "express";
 import { CustomError } from "../utils/custom-error";
 import { TEMP_DIR_NAME } from "../config/const";
-import os from "os";
 import { logInfo, logWarn, logError } from "../utils/log";
 export class PrintJobLocalService {
   static readonly TEMP_DIR = path.join(os.tmpdir(), TEMP_DIR_NAME);
@@ -47,7 +47,7 @@ export class PrintJobLocalService {
     }
     const files = fs
       .readdirSync(codeDir)
-      .filter((f) => path.extname(f).toLowerCase() === ".pdf");
+      .filter((f: string) => path.extname(f).toLowerCase() === ".pdf");
     if (files.length === 0) {
       logWarn(`[LOCAL_DOWNLOAD_FAIL] PDF 없음 code=${code}`);
       throw new CustomError("해당 코드에 대한 PDF 파일이 없습니다.", 404);
@@ -73,7 +73,7 @@ export class PrintJobLocalService {
         fs.unlink(tempZipPath, () => {});
       });
     });
-    archive.on("error", (err) => {
+    archive.on("error", (err: Error) => {
       logError(`[LOCAL_DOWNLOAD_ZIP_ERROR] code=${code}, err=${err.message}`);
       throw new CustomError("압축 파일 생성 실패: " + err.message, 500);
     });

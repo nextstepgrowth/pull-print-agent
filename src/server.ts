@@ -1,7 +1,8 @@
 // Express + Electron 자동 프린트 서버 (TypeScript)
-import express, { Request, Response } from "express";
-import multer from "multer";
-import path from "path";
+const express = require("express");
+const multer = require("multer");
+const path = require("path");
+import type { Request, Response, NextFunction } from "express";
 import { PrintJobController } from "./controllers/print-job-controller";
 import { PrintJobLocalService } from "./services/print-job-local-service";
 import { logInfo, logWarn, logError } from "./utils/log";
@@ -29,7 +30,7 @@ const upload = multer({ dest: path.join(__dirname, "uploads/") });
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
 // deleteTimeoutFile을 미들웨어로 등록
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   PrintJobLocalService.deleteTimeoutFile();
   logInfo(`[REQ] ${req.method} ${req.originalUrl}`);
   next();
@@ -43,15 +44,15 @@ app.post(
     try {
       const result = await PrintJobController.handlePost(req);
       logInfo(
-        `[UPLOAD] code=${req.params.code}, file=${req.file?.originalname}, ip=${req.ip}`,
+        `[UPLOAD] code=${(req as any).params.code}, file=${(req as any).file?.originalname}, ip=${(req as any).ip}`,
       );
       res.json(result);
     } catch (err: any) {
       if (err instanceof CustomError) {
         logWarn(
-          `[UPLOAD_FAIL] code=${req.params.code}, file=${req.file?.originalname}, status=${err.status}, msg=${err.message}`,
+          `[UPLOAD_FAIL] code=${(req as any).params.code}, file=${(req as any).file?.originalname}, status=${err.status}, msg=${err.message}`,
         );
-        res.status(err.status).json({ error: err.message });
+        res.status(Number((err as any).status)).json({ error: err.message });
       } else {
         throw err;
       }
@@ -66,9 +67,9 @@ app.get("/print-jobs/:code", async (req: Request, res: Response) => {
   } catch (err: any) {
     if (err instanceof CustomError) {
       logWarn(
-        `[DOWNLOAD_FAIL] code=${req.params.code}, status=${err.status}, msg=${err.message}`,
+        `[DOWNLOAD_FAIL] code=${(req as any).params.code}, status=${err.status}, msg=${err.message}`,
       );
-      res.status(err.status).json({ error: err.message });
+      res.status(Number((err as any).status)).json({ error: err.message });
     } else {
       throw err;
     }

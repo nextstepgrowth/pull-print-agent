@@ -1,6 +1,6 @@
 import axios from "axios";
-import FormData from "form-data";
-import fs from "fs";
+const FormData = require("form-data");
+const fs = require("fs");
 import { Request, Response } from "express";
 import { REMOTE_URL } from "../config/const";
 import { CustomError } from "../utils/custom-error";
